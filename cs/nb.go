@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net"
@@ -19,88 +18,22 @@ func main() {
 	//log.SetFlags(log.Ldate | log.Lmicroseconds | log.Lshortfile)
 	log.SetFlags(log.Ldate | log.Lmicroseconds)
 
-	printWelcome()
-
 	args := os.Args
 	argc := len(os.Args)
-	if argc <= 2 {
-		printHelp()
-		os.Exit(0)
+
+	if argc < 2 {
+		log.Fatalln(`需要两个参数, 例如 "waryCS 1997 192.168.1.2:3389".`)
 	}
 
-	//TODO:support UDP protocol
-
-	/*var logFileError error
-	if argc > 5 && args[4] == "-log" {
-		logPath := args[5] + "/" + time.Now().Format("2006_01_02_15_04_05") // "2006-01-02 15:04:05"
-		logPath += args[1] + "-" + strings.Replace(args[2], ":", "_", -1) + "-" + args[3] + ".log"
-		logPath = strings.Replace(logPath, `\`, "/", -1)
-		logPath = strings.Replace(logPath, "//", "/", -1)
-		logFile, logFileError = os.OpenFile(logPath, os.O_APPEND|os.O_CREATE, 0666)
-		if logFileError != nil {
-			log.Fatalln("[x]", "log file path error.", logFileError.Error())
-		}
-		log.Println("[√]", "open test log file success. path:", logPath)
-	}*/
-
-	switch args[1] {
-	case "-listen":
-		if argc < 3 {
-			log.Fatalln(`-listen 需要两个参数, 例如 "wary -listen 1997 2017".`)
-		}
-		port1 := checkPort(args[2])
-		port2 := checkPort(args[3])
-		log.Println("[√]", "开始监听端口1:", port1, " 和 端口2:", port2)
-		port2port(port1, port2)
-		break
-	case "-tran":
-		if argc < 3 {
-			log.Fatalln(`-tran 需要两个参数, 例如 "wary -tran 1997 192.168.1.2:3389".`)
-		}
-		port := checkPort(args[2])
-		var remoteAddress string
-		if checkIp(args[3]) {
-			remoteAddress = args[3]
-		}
-		split := strings.SplitN(remoteAddress, ":", 2)
-		log.Println("[√]", "开始传送地址1:", remoteAddress, "到 地址2:", split[0]+":"+port)
-		port2host(port, remoteAddress)
-		break
-	case "-slave":
-		if argc < 3 {
-			log.Fatalln(`-slave 需要两个参数, 例如 "wary -slave 127.0.0.1:3389 8.8.8.8:1997".`)
-		}
-		var address1, address2 string
-		checkIp(args[2])
-		if checkIp(args[2]) {
-			address1 = args[2]
-		}
-		checkIp(args[3])
-		if checkIp(args[3]) {
-			address2 = args[3]
-		}
-		log.Println("[√]", "开始连接地址1:", address1, " 和 地址2:", address2)
-		host2host(address1, address2)
-		break
-	default:
-		printHelp()
+	port := checkPort(args[1])
+	var remoteAddress string
+	if checkIp(args[2]) {
+		remoteAddress = args[2]
 	}
-}
+	split := strings.SplitN(remoteAddress, ":", 2)
+	log.Println("[√]", "开始传送地址1:", remoteAddress, "到 地址2:", split[0]+":"+port)
+	port2host(port, remoteAddress)
 
-func printWelcome() {
-	// sleep one second because the fmt is not thread-safety.
-	// if not to do this, fmt.Print will print after the log.Print.
-	time.Sleep(time.Second)
-}
-func printHelp() {
-	fmt.Println(`usage: "-listen port1 port2" example: "wary -listen 1997 2017" `)
-	fmt.Println(`       "-tran port1 ip:port2" example: "wary -tran 1997 192.168.1.2:3389" `)
-	fmt.Println(`       "-slave ip1:port1 ip2:port2" example: "wary -slave 127.0.0.1:3389 8.8.8.8:1997" `)
-	fmt.Println(`============================================================`)
-	fmt.Println(`optional argument: "-log logpath" . example: "wary -listen 1997 2017 -log d:/nb" `)
-	fmt.Println(`log filename format: Y_m_d_H_i_s-agrs1-args2-args3.log`)
-	fmt.Println(`============================================================`)
-	fmt.Println(`if you want more help, please read "README.md". `)
 }
 
 func checkPort(port string) string {
