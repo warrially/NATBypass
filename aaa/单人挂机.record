@@ -1,0 +1,89 @@
+{
+    "operations": [
+        {
+            "timing": 0,
+            "operationId": "ImeClipboard",
+            "text": "PEv0nLUQnWjFcCiv"
+        },
+        {
+            "timing": 1520,
+            "operationId": "PutMultiTouch",
+            "points": [
+                {
+                    "id": 1,
+                    "x": 9272,
+                    "y": 9497,
+                    "state": 1
+                }
+            ]
+        },
+        {
+            "timing": 1525,
+            "operationId": "PutMultiTouch",
+            "points": []
+        },
+        {
+            "timing": 1702,
+            "operationId": "PutMultiTouch",
+            "points": [
+                {
+                    "id": 1,
+                    "x": 9272,
+                    "y": 9497,
+                    "state": 0
+                }
+            ]
+        },
+        {
+            "timing": 1709,
+            "operationId": "PutMultiTouch",
+            "points": []
+        },
+        {
+            "timing": 6007,
+            "operationId": "PutMultiTouch",
+            "points": [
+                {
+                    "id": 1,
+                    "x": 5504,
+                    "y": 7023,
+                    "state": 1
+                }
+            ]
+        },
+        {
+            "timing": 6013,
+            "operationId": "PutMultiTouch",
+            "points": []
+        },
+        {
+            "timing": 6208,
+            "operationId": "PutMultiTouch",
+            "points": [
+                {
+                    "id": 1,
+                    "x": 5504,
+                    "y": 7023,
+                    "state": 0
+                }
+            ]
+        },
+        {
+            "timing": 6213,
+            "operationId": "PutMultiTouch",
+            "points": []
+        }
+    ],
+    "recordInfo": {
+        "loopType": 1,
+        "loopTimes": 1,
+        "circleDuration": 10462,
+        "loopInterval": 0,
+        "loopDuration": 3600000,
+        "accelerateTimes": 2,
+        "recordName": "",
+        "createTime": "2019-10-04 11:07:15",
+        "playOnBoot": false,
+        "rebootTiming": 0
+    }
+}
