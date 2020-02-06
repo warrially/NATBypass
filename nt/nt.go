@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io"
+	// "io"
 	"log"
 	"net"
 	"os"
@@ -133,7 +133,7 @@ func forward(conn1 net.Conn, conn2 net.Conn) {
 
 func connCopy(conn1 net.Conn, conn2 net.Conn, wg *sync.WaitGroup) {
 	//TODO:log, record the data from conn1 and conn2.
-	io.Copy(conn1, conn2)
+	mycopy1(conn1, conn2)
 	conn1.Close()
 	log.Println("[←]", "断开本地连接:["+conn1.LocalAddr().String()+"] 和远程:["+conn1.RemoteAddr().String()+"]")
 	//conn2.Close()
@@ -141,3 +141,25 @@ func connCopy(conn1 net.Conn, conn2 net.Conn, wg *sync.WaitGroup) {
 	wg.Done()
 }
 
+
+func mycopy1(conn1 net.Conn, conn2 net.Conn){
+	// io.Copy(conn1, conn2)
+
+	buff := make([]byte, 4096)
+
+	for {
+		n, err := conn1.Read(buff)
+		if err != nil {
+			return
+		}
+
+		for i:=0 ; i < n; i++ {
+			buff[i] = ^buff[i]
+		}
+
+		conn2.Write(buff[:n])
+	}
+
+
+
+}
