@@ -141,8 +141,7 @@ func connCopy(conn1 net.Conn, conn2 net.Conn, wg *sync.WaitGroup) {
 	wg.Done()
 }
 
-
-func mycopy1(conn1 net.Conn, conn2 net.Conn){
+func mycopy1(conn1 net.Conn, conn2 net.Conn) {
 	// io.Copy(conn1, conn2)
 
 	buff := make([]byte, 4096)
@@ -153,13 +152,16 @@ func mycopy1(conn1 net.Conn, conn2 net.Conn){
 			return
 		}
 
-		for i:=0 ; i < n; i++ {
+		m := 10
+		if n < m {
+			m = n
+		}
+
+		for i := 0; i < m; i++ {
 			buff[i] = ^buff[i]
 		}
 
 		conn2.Write(buff[:n])
 	}
-
-
 
 }
