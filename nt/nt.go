@@ -124,19 +124,23 @@ func forward(conn1 net.Conn, conn2 net.Conn) {
 	log.Printf("[+] 开始传输. [%s],[%s] <-> [%s],[%s] \n", conn1.LocalAddr().String(), conn1.RemoteAddr().String(), conn2.LocalAddr().String(), conn2.RemoteAddr().String())
 	var wg sync.WaitGroup
 	// wait tow goroutines
+	isConnect := true
 	wg.Add(2)
-	go connCopy(conn1, conn2, &wg)
-	go connCopy(conn2, conn1, &wg)
+	go connCopy(conn1, conn2, &wg, &isConnect)
+	go connCopy(conn2, conn1, &wg, &isConnect)
 	//blocking when the wg is locked
 	wg.Wait()
 }
 
-func connCopy(conn1 net.Conn, conn2 net.Conn, wg *sync.WaitGroup) {
+func connCopy(conn1 net.Conn, conn2 net.Conn, wg *sync.WaitGroup, isConnect *bool) {
 	//TODO:log, record the data from conn1 and conn2.
 	mycopy1(conn1, conn2)
-	conn1.Close()
+	if *isConnect {
+		conn1.Close()
+		conn2.Close()
+		*isConnect = true
+	}
 	log.Println("[←]", "断开本地连接:["+conn1.LocalAddr().String()+"] 和远程:["+conn1.RemoteAddr().String()+"]")
-	//conn2.Close()
 	//log.Println("[←]", "close the connect at local:["+conn2.LocalAddr().String()+"] and remote:["+conn2.RemoteAddr().String()+"]")
 	wg.Done()
 }
